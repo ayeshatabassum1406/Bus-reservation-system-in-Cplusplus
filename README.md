@@ -1,1 +1,1 @@
-# Bus-reservation-system-in-C-
+# Bus-reservation-system-in-C++
