@@ -1,0 +1,531 @@
+#include <conio.h>
+
+#include<windows.h>
+
+#include <cstdio>
+
+#include <iostream>
+
+#include <string.h>
+
+#include <cstdlib>
+
+#include<fstream>
+
+using namespace std;
+
+static int p = 0,count=0;
+
+float allsell=0;
+
+class a
+
+{
+
+ 	 char busn[5], driver[10], arrival[8], depart[8], from[10], to[10], seat[8][4][10];
+
+	public:
+			
+  				void install();
+
+  				void allotment();
+
+   				void empty();
+
+   				void show();
+
+  				void avail();
+
+    			void position(int i);
+    				void intro();
+
+
+}
+
+bus[10];
+
+void vline(char ch)
+
+{
+
+ 	 for (int i=80;i>0;i--)
+
+  	cout<<ch;
+
+}
+	void intro()
+{
+	system("color 0B");
+	
+	cout<<"\n\n\n\n\n\n\n\t\t\t\t\t***********************BUS RESERVATION SYSTEM***********************";
+	
+	cout<<"\n\n\n\n                    \t\t\t\t  MADE BY : AYESHA TABASSUM ";
+	cout<<"\n\n                        \t\t\t  SUBJECT :FILE STRUCTURES";
+	
+	cin.get();
+}
+void instally();
+void allots();
+
+
+void a::install()
+
+{
+	
+	
+
+ 	cout<<"Enter bus no: \t";
+
+  	cin>>bus[p].busn;
+
+ 	cout<<"\nEnter Driver's name: ";
+
+  	cin>>bus[p].driver;
+  
+ 	cout<<"\nDeparture: ";
+
+	cin>>bus[p].depart;
+	
+  	cout<<"\nArrival time: ";
+
+ 	cin>>bus[p].arrival;
+
+ 	cout<<"\nFrom: \t\t\t";
+
+  	cin>>bus[p].from;
+
+ 	cout<<"\nTo: \t\t\t";
+
+  	cin>>bus[p].to;
+  	
+  	bus[p].empty();
+
+ 	p++;
+  	cout<<"\n";
+	cout<<"Bus Information Added!!\n";
+	system("PAUSE");
+	system("CLS");
+
+
+}
+void instally()
+{
+	a  b;
+	ofstream ofile;
+	ofile.open("bus.txt",ios::binary|ios::app);
+	b.install();
+	ofile.write(reinterpret_cast<char *> (&b), sizeof(a));
+	ofile.close();
+}
+void a::allotment()
+
+{
+
+ 	int seat;
+
+ 	char number[5];
+
+  	top:
+
+ 	cout<<"Bus no: ";
+
+	cin>>number;
+
+  	int n;
+
+  	for(n=0;n<=p;n++)
+
+  	{
+
+    		if(strcmp(bus[n].busn, number)==0)
+
+    		break;
+
+  	}
+
+ 	 while(n<=p)
+
+  	{
+		int price;
+		
+	
+		
+   		cout<<"\nSeat Number: ";
+
+    	cin>>seat;
+		
+   		if(seat>32)
+
+    	{
+
+      		cout<<"\nThere are only 32 seats available in this bus.\n";
+
+   		 }
+
+    	else
+
+  	  {
+
+    		if (strcmp(bus[n].seat[seat/4][(seat%4)-1], "Empty")==0)
+
+     		{
+
+        		cout<<"Enter passanger's name: ";
+
+        		cin>>bus[n].seat[seat/4][(seat%4)-1];
+	
+				price=300*seat;	
+				
+				price=price+(price*0.7);
+				
+				allsell=allsell+price;
+		
+				cout<<"amount:"<<price;
+		
+				cout<<"\n\n";
+		
+      		  break;
+
+     		}
+
+   			else
+				
+      		cout<<"The seat no. is already reserved.\n";
+      		
+      	
+			break;
+      }
+
+	}
+
+    if(n>p)
+
+    {
+
+     	cout<<"Enter correct bus no.\n";
+
+      	goto top;
+
+    }
+    
+    cout<<"\n";
+	system("PAUSE");
+	
+	system("CLS");
+
+}
+  	
+void allots()
+{
+	a c;
+	
+	ofstream ofile;
+	ofile.open("bus1.txt",ios::binary|ios::app);
+	c.allotment();
+	ofile.write(reinterpret_cast<char *> (&c), sizeof(a));
+	ofile.close();
+}
+void a::empty()
+
+{
+
+ 	for(int i=0; i<8;i++)
+
+  	{
+
+    	for(int j=0;j<4;j++)
+
+    	{
+
+     		 strcpy(bus[p].seat[i][j], "Empty");
+
+    	}
+
+ 	}
+
+}
+
+
+void a::show()
+
+{
+
+  	int n;
+
+  	char number[5];
+
+  	cout<<"\nEnter bus no: ";
+
+ 	cin>>number;
+
+ 	for(n=0;n<=p;n++)
+
+ 	{
+
+    	if(strcmp(bus[n].busn, number)==0)
+
+    	break;
+
+ 	 }
+
+	while(n<=p)
+
+	{
+		int price;
+
+  		vline('$');
+
+ 		cout<<"\nBus no: \t"<<bus[n].busn<<"\n\nDriver: "<<bus[n].driver
+
+    	<<"\n\nDeparture Time:"<<bus[n].depart<<"\t\t\tArrival time: "<<bus[n].arrival;
+	
+		cout<<"\n\nFrom: "<<bus[n].from<<"\t\tTo: "
+
+    	<<bus[n].to<<"\n";
+	
+ 		vline('$');
+
+  		bus[0].position(n);
+  
+  		int a=1;
+
+  		for (int i=0; i<8; i++)
+
+  		{
+
+    		for(int j=0;j<4;j++)
+
+    		{
+
+     			a++;
+
+     			if(strcmp(bus[n].seat[i][j],"Empty")!=0)
+
+      				cout<<"\nThe seat no "<<(a-1)<<" is reserved for "<<bus[n].seat[i][j]<<".";
+	
+    		}
+    		cout<<"\n";  
+
+  		}
+  		
+		system("pause");
+ 		
+		system("cls");
+		
+		break;
+
+}
+
+  if(n>p)
+	
+   	cout<<"Enter correct bus number";
+    
+	
+}
+
+void a::position(int l)
+
+{
+
+  	int s=0;p=0;
+
+  	for (int i =0; i<8;i++)
+
+  	{
+
+   		cout<<"\n";
+
+    	for (int j = 0;j<4; j++)
+
+    	{
+	
+      		s++;
+
+      		if(strcmp(bus[l].seat[i][j], "Empty")==0)
+
+        	{
+
+          		cout.width(5);
+
+          		cout.fill(' ');
+
+         		cout<<s<<".";
+
+          		cout.width(10);
+
+          		cout.fill(' ');
+
+          		cout<<bus[l].seat[i][j];
+
+         		p++;
+
+       		 }
+
+        	else
+
+       		{
+
+        		cout.width(5);
+
+        		cout.fill(' ');
+
+        		cout<<s<<".";
+
+        		cout.width(10);
+
+        		cout.fill(' ');
+
+        		cout<<bus[l].seat[i][j];
+
+       		}
+
+      	}
+
+    }
+
+ 	 cout<<"\n\n\nThere are "<<p<<" seats empty in Bus No: "<<bus[l].busn<<"\n";
+
+}
+
+
+void a::avail()
+
+{   
+
+
+ 	for(int n=0;n<count;n++)
+
+ 	{
+		vline('_');
+		
+		cout<<"\n";
+		
+    	vline('*');
+
+    	cout<<"\nBus no: \t"<<bus[n].busn<<"\n\nDriver: "<<bus[n].driver
+
+    	<<"\n\nDeparture Time: "<<bus[n].depart<<"\t\tArrival time: "<<bus[n].arrival;
+	
+		cout<<"\n\nFrom: "<<bus[n].from<<"\t\t\tTo: "
+
+    	<<bus[n].to<<"\n";
+	
+    	vline('*');
+    	
+   		cout<<endl;
+	
+ 		vline('_');
+		cout<<"\n\n\n\n";
+	}
+  		
+      cout<<"!!!!!!!!!!!!!!!!!!!!!"<<" BUSES AVAILABLE ARE "<<count<<"!!!!!!!!!!!!!!!!!!!!!"<<endl;
+		system("PAUSE");
+		system("CLS");
+}
+	
+
+int main()
+
+{  	 
+		intro();
+
+		system("color 4F");
+		
+		system("cls");	
+		
+		int w;
+		
+		while(1)
+
+		{	
+				system("color E4");
+
+   				//system("cls");
+
+ 				cout<<"\n\n\n\n\n\t\t\t\t";
+ 				
+				vline('#');
+
+				cout<<"\n\t\t\t\t\t\tWELCOME TO BUS RESERVATION SYSTEM ";
+				
+				cout<<"\n\t\t\t\t";
+				
+				vline('#');
+				
+				cout<<"\n\n\n\n\n";
+				
+  				cout<<"\t\t\t\t1.Install\n\t\t\t\t"
+
+  				<<"2.Reservation\n\t\t\t\t"
+
+  				<<"3.Show status\n\t\t\t\t"
+
+ 				<<"4.Buses Available. \n\t\t\t\t"
+ 				<<"5.total sales. \n\t\t\t\t"
+
+  				<<"6.Exit";
+ 
+  
+			
+				
+  				cout<<"\n\t\t\t\tEnter your choice:-> ";
+
+ 				cin>>w;
+ 				
+
+ 				switch(w)
+
+ 				{
+
+    				case 1:		system("color 2F");
+    							
+
+								bus[p].install();
+								
+    							count=count+1;
+    						
+								break;
+
+    				case 2:  	system("color 5F");
+    			
+								bus[p].allotment();
+
+     							break;
+
+					case 3:		system("color 47"); 
+				
+								bus[0].show();
+
+     							break;
+
+    				case 4: 	 system("color 17");
+	
+								bus[count].avail();
+							
+								break;
+					case 5:		system("color 03");
+								cout<<endl<<"\t\t\t\t\t\t\t\t\tTOTAL SALES:"<<allsell<<endl<<"\t\t\t\t\t\t\t\t\t******Thank You******"<<endl;
+								system("PAUSE");
+								system("CLS");
+								break;		
+
+    				case 6:		 system("color B4");
+    								cout<<endl<<"\t\t\t\t\t\t\t\t\t~~~~~~VISIT AGAIN~~~~~~"<<endl;
+    							
+		
+								exit(0);
+					
+					default: cout<<"invalid chioce";
+						
+							
+								system("cls");
+    		
+
+  				}
+
+		}			
+
+	return 0;
+
+	
+}
