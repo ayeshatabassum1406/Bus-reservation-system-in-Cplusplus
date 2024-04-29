@@ -1,2 +1,2 @@
 # Bus-reservation-system-in-C++
-#### VTU 6th sem mini project 
+#### An application program designed to streamline manual tasks involved in managing buses, customers, and ticket bookings. 
